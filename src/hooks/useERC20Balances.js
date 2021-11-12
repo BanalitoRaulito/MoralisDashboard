@@ -22,10 +22,10 @@ export const useERC20Balances = (params) => {
   const fetchERC20Balances = async () => {
     let balances = []
     let networks = Object.entries(networkConfigs)
+    let disabledNetworks = ['0x539']
 
-    console.log(networks.filter(chain => chain[0] !== '0x539'))
-    networks.filter(network => network[0] !== '0x539').forEach(chain => {
-      console.log(chain[0])
+    networks.filter(network => !disabledNetworks.includes(network[0]))
+        .forEach(chain => {
       balances.push(account.getTokenBalances({ address: walletAddress, chain: chain[0] }));
     })
 
