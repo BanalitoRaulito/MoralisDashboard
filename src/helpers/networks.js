@@ -1,5 +1,9 @@
 export const networkConfigs = {
   "0x1": {
+    chainId: 1,
+    chainKey: "0x1",
+    chainName: "Ethereum",
+    currencyName: "ETH",
     currencySymbol: "ETH",
     blockExplorerUrl: "https://etherscan.io/",
     wrapped: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -28,6 +32,7 @@ export const networkConfigs = {
   },
   "0xa86a": {
     chainId: 43114,
+    chainKey: "0xa86a",
     chainName: "Avalanche Mainnet",
     currencyName: "AVAX",
     currencySymbol: "AVAX",
@@ -36,6 +41,7 @@ export const networkConfigs = {
   },
   "0x38": {
     chainId: 56,
+    chainKey: "0x38",
     chainName: "Smart Chain",
     currencyName: "BNB",
     currencySymbol: "BNB",
@@ -53,6 +59,7 @@ export const networkConfigs = {
   },
   "0x89": {
     chainId: 137,
+    chainKey: "0x89",
     chainName: "Polygon Mainnet",
     currencyName: "MATIC",
     currencySymbol: "MATIC",
@@ -69,6 +76,8 @@ export const networkConfigs = {
     blockExplorerUrl: "https://mumbai.polygonscan.com/",
   },
 };
+
+export const disabledNetworks = ['0x539', '0x3', '0x4', '0x2a', '0x5', '0x13881', '0x61'];
 
 export const getNativeByChain = (chain) =>
   networkConfigs[chain]?.currencySymbol || "NATIVE";
