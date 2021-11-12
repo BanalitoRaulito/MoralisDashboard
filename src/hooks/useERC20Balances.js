@@ -29,9 +29,11 @@ export const useERC20Balances = (params) => {
       balances.push(account.getTokenBalances({ address: walletAddress, chain: chain[0] }));
     })
 
-    return await Promise.all(balances)
+    const assetBalance = await Promise.all(balances)
       .then((result) => result)
       .catch((e) => alert(e.message));
+
+    return [].concat.apply([], assetBalance)
   };
 
   return { fetchERC20Balances, assets };

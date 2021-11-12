@@ -9,9 +9,7 @@ const styles = {
   },
 };
 function ERC20Balance(props) {
-  const { assetsMake } = useERC20Balances(props);
-  let assets = [].concat(...assetsMake)
-  console.log(assets)
+  let { assets } = useERC20Balances(props);
   const { Moralis } = useMoralis();
 
   const columns = [
