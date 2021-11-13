@@ -4,6 +4,7 @@ import {useMemo} from "react";
 import { useFilters } from "hooks/useFilters";
 import BalanceTable from "./BalanceTable";
 import Filters from "./Filters";
+import { useTokenPriceMap } from "hooks/useTokenPriceMap";
 
 const styles = {
   title: {
@@ -19,13 +20,20 @@ function ERC20Balances() {
     () => assets.filter(asset => filters[Number(asset.chainId)]),
     [assets, filters]
   );
+  const tokenPriceMap = useTokenPriceMap(assets);
+  const filteredAssetsWithPrice = useMemo(() => {
+    return filteredAssets.map(asset => ({
+      ...asset,
+      usdPrice: tokenPriceMap.get(asset.chainId, asset.token_address)
+    }))
+  }, [tokenPriceMap, filteredAssets]);
 
   return (
     <div style={{width: "65vw", padding: "15px"}}>
       <h1 style={styles.title}>💰Token Balances</h1>
       <Skeleton loading={!assets}>
         <Filters filters={filters} toggleFilter={toggleFilter}/>
-        <BalanceTable assets={filteredAssets}/>
+        <BalanceTable assets={filteredAssetsWithPrice}/>
       </Skeleton>
     </div>
   );
