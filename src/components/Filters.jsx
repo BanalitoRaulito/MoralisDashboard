@@ -11,6 +11,7 @@ const Filters = ({filters, toggleFilter}) =>
           toggleFilter(chainId);
         }}
         ghost={!filters[chainId]}
+        type="primary"
       >
         {currencySymbol}
       </Button>
