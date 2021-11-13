@@ -6,13 +6,7 @@ import BalanceTable from "./BalanceTable";
 import Filters from "./Filters";
 import { useTokenPriceMap } from "hooks/useTokenPriceMap";
 import {useDateToBlock} from "../hooks/useDateToBlock";
-
-const styles = {
-  title: {
-    fontSize: "30px",
-    fontWeight: "700",
-  },
-};
+import BalanceChart from "./BalanceChart";
 
 function ERC20Balances() {
   const {filters, toggleFilter} = useFilters();
@@ -34,7 +28,7 @@ function ERC20Balances() {
 
   return (
     <div style={{width: "65vw", padding: "15px"}}>
-      <h1 style={styles.title}>💰Token Balances</h1>
+      <BalanceChart />
       <Skeleton loading={!assets}>
         <Filters filters={filters} toggleFilter={toggleFilter}/>
         <BalanceTable assets={filteredAssetsWithPrice}/>
