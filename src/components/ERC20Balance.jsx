@@ -106,8 +106,7 @@ function ERC20Balance() {
   const filteredAssets = useMemo(
     () => assets.filter(asset => filters[asset.chainId]),
     [assets, filters]
-  );
-  console.log(assets, filters);
+  )
 
   return (
     <div style={{width: "65vw", padding: "15px"}}>

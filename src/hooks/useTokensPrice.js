@@ -9,7 +9,7 @@ const IsNative = (address) =>
 const useTokensPrice = (options) => {
   const { token } = useMoralisWeb3Api();
   const { isInitialized } = useMoralis();
-  const [tokenPrice, setTokenPrice] = useState();
+  const [tokensPrice, setTokensPrice] = useState();
 
   useEffect(() => {
     if (!options || !isInitialized) return null;
@@ -17,22 +17,26 @@ const useTokensPrice = (options) => {
       price.usdPrice = c2.format(price.usdPrice);
       const { value, decimals, symbol } = price.nativePrice;
       price.nativePrice = tokenValueTxt(value, decimals, symbol);
-      setTokenPrice(price);
+      setTokensPrice(price);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, options]);
 
-  const fetchTokensPrice = async (options) => {
-    const { chain, address } = options;
-    const tokenAddress = IsNative(address) ? getWrappedNative(chain) : address;
-    console.log("chain", chain);
-    console.log("address", address);
-    console.log("tokenAddress", tokenAddress);
-    return token
-      .getTokenPrice({ chain, address: tokenAddress })
-      .then((result) => result);
+  const fetchTokensPrice = async (tokens) => {
+    tokens
+      .forEach(tokenData => {
+        const { chain, address } = tokenData;
+        const tokenAddress = IsNative(address) ? getWrappedNative(chain) : address;
+        console.log("chain", chain, "address", address,"tokenAddress", tokenAddress);
+
+        return token
+          .getTokenPrice({ chain, address: tokenAddress })
+          .then((result) => {
+            console.log(result, 'hey')
+          });
+      })
   };
-  return { fetchTokensPrice, tokenPrice };
+  return { fetchTokensPrice, tokensPrice };
 };
 
 export default useTokensPrice;
