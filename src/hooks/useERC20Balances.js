@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useMoralis, useMoralisWeb3Api} from "react-moralis";
 import {useMoralisDapp} from "providers/MoralisDappProvider/MoralisDappProvider";
-import {networkConfigs, disabledNetworks} from "../helpers/networks";
+import {networkConfigs} from "../helpers/networks";
 
 export const useERC20Balances = () => {
   const {account} = useMoralisWeb3Api();
@@ -22,7 +22,6 @@ export const useERC20Balances = () => {
     let networks = Object.keys(networkConfigs);
 
     networks
-      .filter(chain => !disabledNetworks.includes(chain))
       .forEach(chainId => {
         account
           .getTokenBalances({address: walletAddress, chain: chainId})
