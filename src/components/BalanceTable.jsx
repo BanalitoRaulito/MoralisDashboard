@@ -39,6 +39,15 @@ const BalanceTable = ({assets}) => {
         parseFloat(Moralis.Units.FromWei(value, item.decimals).toFixed(6)),
     },
     {
+      title: "Balance USD",
+      dataIndex: "usdPrice",
+      key: "usdPrice",
+      render: (usdPrice, item) => {
+        console.log(usdPrice, item)
+        return Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice;
+      },
+    },
+    {
       title: "Address",
       dataIndex: "token_address",
       key: "token_address",
