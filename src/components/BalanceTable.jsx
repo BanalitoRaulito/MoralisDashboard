@@ -1,6 +1,6 @@
 import {useMoralis} from "react-moralis";
 import {Table} from "antd";
-import {getEllipsisTxt} from "../helpers/formatters";
+import {c2, getEllipsisTxt} from "../helpers/formatters";
 
 const BalanceTable = ({assets}) => {
   const {Moralis} = useMoralis();
@@ -43,7 +43,7 @@ const BalanceTable = ({assets}) => {
       dataIndex: "usdPrice",
       key: "usdPrice",
       render: (usdPrice, item) => {
-        return usdPrice ? Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice : 'Loading...';
+        return usdPrice ? c2.format(Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice) : 'Loading...';
       },
     },
     {

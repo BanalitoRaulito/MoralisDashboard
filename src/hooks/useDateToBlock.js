@@ -11,26 +11,25 @@ export const useDateToBlock = () => {
   const [dates, setDates] = useState(() => {
     let dateArray = [Date.now().toString()]
     for (let i = 0; i < 30; i++) {
-      dateNow -= 1000*60*60*24;
-      dateArray.push(dateNow.toString())
+      dateNow -= 1000*60*60*60*24;
+      dateArray.push(dateNow)
     }
     return dateArray;
   });
 
-  //let block = useMoralisWeb3ApiCall(native.getDateToBlock, {chain: 'eth', date: dates[3]});
-  console.log(block)
-  dates.forEach(date => {
-    let block = useMoralisWeb3ApiCall(native.getDateToBlock, {chain: 'eth', date: dates[3]})
-  })
-
   useEffect(() => {
     if (!isInitialized) { return; }
     dates.forEach(date => {
-      native.getDateToBlock({chain: 'eth', date: date.toString()})
-        .then(block => {
+      native.getDateToBlock({chain: 'eth', date: date})
+        .then(({block}) => {
           console.log('block', block)
+          setDates(prevDates => {
+
+            return {block, };
+          });
         })
     })
+    console.log(dates)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized]);
 
