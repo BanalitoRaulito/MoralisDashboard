@@ -6,7 +6,8 @@ import BalanceTable from "./BalanceTable";
 import Filters from "./Filters";
 import { useTokenPriceMap } from "hooks/useTokenPriceMap";
 import {useDateToBlock} from "../hooks/useDateToBlock";
-import BalanceChart from "./BalanceChart";
+import BalanceChart from "./Chart/BalanceChart";
+import TokenChart from "./Chart/TokenChart";
 
 function ERC20Balances() {
   const {filters, toggleFilter} = useFilters();
@@ -24,11 +25,12 @@ function ERC20Balances() {
     }))
   }, [tokenPriceMap, filteredAssets]);
 
-  const date = useDateToBlock()
+  //const date = useDateToBlock()
 
   return (
     <div style={{width: "65vw", padding: "15px"}}>
       <BalanceChart />
+
       <Skeleton loading={!assets}>
         <Filters filters={filters} toggleFilter={toggleFilter}/>
         <BalanceTable assets={filteredAssetsWithPrice}/>

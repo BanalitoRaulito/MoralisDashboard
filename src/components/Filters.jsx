@@ -9,28 +9,6 @@ const styles = {
   }
 };
 
-const menuItems = [
-  {
-    chainId: 1,
-    value: "Ethereum",
-    icon: <ETHLogo />,
-  },
-  {
-    chainId: 56,
-    value: "Binance",
-    icon: <BSCLogo />,
-  },
-  {
-    chainId: 137,
-    value: "Polygon",
-    icon: <PolygonLogo />,
-  },
-  {
-    chainId: 43114,
-    value: "Avalanche",
-    icon: <AvaxLogo />,
-  },
-];
 const icons = {
   1: <ETHLogo />,
   56: <BSCLogo />,
