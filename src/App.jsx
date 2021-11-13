@@ -5,7 +5,7 @@ import {
   Switch,
   Route,
   NavLink,
-  Redirect,
+  useLocation,
 } from "react-router-dom";
 import Account from "components/Account";
 import Chains from "components/Chains";
@@ -23,6 +23,48 @@ import QuickStart from "components/QuickStart";
 import Contract from "components/Contract/Contract";
 import Text from "antd/lib/typography/Text";
 const { Header, Footer } = Layout;
+
+const NavItems = () => {
+  const { pathname } = useLocation();
+  console.log(pathname);
+
+  return (
+      <Menu
+          theme="light"
+          mode="horizontal"
+          style={{
+            display: "flex",
+            fontSize: "17px",
+            fontWeight: "500",
+            width: "100%",
+            justifyContent: "center",
+          }}
+          defaultSelectedKeys={[pathname]}
+      >
+        <Menu.Item key="/quickstart">
+          <NavLink to="/quickstart">🚀 Quick Start</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/wallet">
+          <NavLink to="/wallet">👛 Wallet</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/1inch">
+          <NavLink to="/1inch">🏦 Dex</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/erc20balance">
+          <NavLink to="/erc20balance">💰 Balances</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/erc20transfers">
+          <NavLink to="/erc20transfers">💸 Transfers</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/nftBalance">
+          <NavLink to="/nftBalance">🖼 NFTs</NavLink>
+        </Menu.Item>
+        <Menu.Item key="/contract">
+          <NavLink to="/contract">📄 Contract</NavLink>
+        </Menu.Item>
+      </Menu>
+  );
+}
 
 const styles = {
   content: {
@@ -68,40 +110,7 @@ const App = ({ isServerInfo }) => {
       <Router>
         <Header style={styles.header}>
           <Logo />
-          <Menu
-            theme="light"
-            mode="horizontal"
-            style={{
-              display: "flex",
-              fontSize: "17px",
-              fontWeight: "500",
-              width: "100%",
-              justifyContent: "center",
-            }}
-            defaultSelectedKeys={["quickstart"]}
-          >
-            <Menu.Item key="quickstart">
-              <NavLink to="/quickstart">🚀 Quick Start</NavLink>
-            </Menu.Item>
-            <Menu.Item key="wallet">
-              <NavLink to="/wallet">👛 Wallet</NavLink>
-            </Menu.Item>
-            <Menu.Item key="dex">
-              <NavLink to="/1inch">🏦 Dex</NavLink>
-            </Menu.Item>
-            <Menu.Item key="balances">
-              <NavLink to="/erc20balance">💰 Balances</NavLink>
-            </Menu.Item>
-            <Menu.Item key="transfers">
-              <NavLink to="/erc20transfers">💸 Transfers</NavLink>
-            </Menu.Item>
-            <Menu.Item key="nft">
-              <NavLink to="/nftBalance">🖼 NFTs</NavLink>
-            </Menu.Item>
-            <Menu.Item key="contract">
-              <NavLink to="/contract">📄 Contract</NavLink>
-            </Menu.Item>
-          </Menu>
+          <NavItems />
           <div style={styles.headerRight}>
             <Chains />
             <TokenPrice
@@ -151,7 +160,6 @@ const App = ({ isServerInfo }) => {
               <>Please login using the "Authenticate" button</>
             </Route>
           </Switch>
-          <Redirect to="/quickstart" />
         </div>
       </Router>
       <Footer style={{ textAlign: "center" }}>
