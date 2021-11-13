@@ -43,8 +43,7 @@ const BalanceTable = ({assets}) => {
       dataIndex: "usdPrice",
       key: "usdPrice",
       render: (usdPrice, item) => {
-        console.log(usdPrice, item)
-        return Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice;
+        return usdPrice ? Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice : 'Loading...';
       },
     },
     {
