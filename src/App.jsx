@@ -10,7 +10,7 @@ import {
 import Account from "components/Account";
 import Chains from "components/Chains";
 import TokenPrice from "components/TokenPrice";
-import ERC20Balance from "components/ERC20Balance";
+import ERC20Balances from "components/ERC20Balances";
 import ERC20Transfers from "components/ERC20Transfers";
 import InchDex from "components/InchDex";
 import NFTBalance from "components/NFTBalance";
@@ -145,7 +145,7 @@ const App = ({ isServerInfo }) => {
               </Tabs>
             </Route>
             <Route path="/erc20balance">
-              <ERC20Balance />
+              <ERC20Balances />
             </Route>
             <Route path="/erc20transfers">
               <ERC20Transfers />
