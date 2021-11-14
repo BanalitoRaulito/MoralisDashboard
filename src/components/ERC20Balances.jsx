@@ -5,10 +5,9 @@ import {useFilters} from "hooks/useFilters";
 import BalanceTable from "./BalanceTable";
 import Filters from "./Filters";
 import {useTokenPriceMap} from "hooks/useTokenPriceMap";
-import {useDateToBlock} from "../hooks/useDateToBlock";
-import BalanceChart from "./Chart/BalanceChart";
-import TokenChart from "./Chart/TokenChart";
 import Moralis from "moralis";
+import TokenValueChart from "./Chart/TokenValueChart";
+import NetworkValueChart from "./Chart/NetworkValueChart";
 
 function ERC20Balances() {
   const {filters, toggleFilter} = useFilters();
@@ -30,11 +29,13 @@ function ERC20Balances() {
     }).sort((a, b) => b.usdValue - a.usdValue)
   }, [tokenPriceMap, filteredAssets]);
 
-  const date = useDateToBlock()
-
   return (
     <div style={{width: "100vw", padding: "15px"}}>
-      <TokenChart assets={filteredAssetsWithPrice}/>
+      {
+        Object.values(filters).every(i => i)
+        ? <NetworkValueChart />
+        : <TokenValueChart assets={filteredAssetsWithPrice}/>
+      }
 
       <Skeleton loading={!assets}>
         <Filters filters={filters} toggleFilter={toggleFilter} assets={filteredAssetsWithPrice}/>

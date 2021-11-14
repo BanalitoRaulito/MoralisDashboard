@@ -6,7 +6,6 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 import {c2} from "../../helpers/formatters";
 
 const colors = scaleOrdinal(schemeCategory10).range();
-console.log(colors)
 
 const getPath = (x, y, width, height) => `M${x},${y + height}
           C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3} ${x + width / 2}, ${y}
@@ -40,13 +39,13 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-function TokenChart({assets}) {
+function TokenValueChart({assets}) {
   return (
     <ResponsiveContainer width="100%" height="20%">
       <BarChart
         width={500}
         height={300}
-        data={assets}
+        data={assets.filter(a => a.usdValue)}
         margin={{
           top: 20,
           right: 30,
@@ -69,5 +68,5 @@ function TokenChart({assets}) {
   );
 }
 
-export default TokenChart;
+export default TokenValueChart;
 

@@ -46,7 +46,7 @@ const data = [
   },
 ];
 
-function BalanceChart() {
+function NetworkValueChart() {
   return (
     <ResponsiveContainer width="100%" height="20%">
       <LineChart
@@ -72,5 +72,5 @@ function BalanceChart() {
   );
 }
 
-export default BalanceChart;
+export default NetworkValueChart;
 
