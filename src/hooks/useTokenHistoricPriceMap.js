@@ -10,6 +10,7 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
   const [map, setMap] = useState({});
   const fetchedChainTokenPairs = useRef({}).current;
 
+
   useEffect(() => {
     if (!isInitialized) { return; }
 
@@ -18,17 +19,22 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
       if (fetchedChainTokenPairs[chainId][token_address]) { return; }
       fetchedChainTokenPairs[chainId][token_address] = true;
 
-      let currentBlock = blocks[chainId]
-      for (let block = currentBlock; block > currentBlock - 30; block--) {
+      const currentBlock = Object.entries(blocks).find(block => {
+        console.log(block[0], chainId)
+        return block[0] == chainId
+      })
+      if (!currentBlock) {return;}
+      console.log(currentBlock, 'yes', chainId)
+      for (let block = currentBlock[1]; block > currentBlock[1] - 1000000; block-=100000) {
         token
-          .getTokenPrice({chain: chainId, address: token_address})
+          .getTokenPrice({chain: chainId, address: token_address, to_block: block})
           .then(({usdPrice}) => {
             setMap(prevMap => {
               const newMap = {...prevMap};
               if (!newMap[chainId]) {
                 newMap[chainId] = {};
               }
-              newMap[chainId][token_address] = usdPrice;
+              newMap[chainId][token_address] ? newMap[chainId][token_address].push(usdPrice) : newMap[chainId][token_address] = [];
               return newMap;
             });
           });

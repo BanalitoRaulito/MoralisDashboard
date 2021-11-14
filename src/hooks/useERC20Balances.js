@@ -32,6 +32,7 @@ export const useERC20Balances = () => {
           .then(tokenBalances => {
             setAssets(prevAssets => [...prevAssets, ...tokenBalances]);
           })
+          .catch(e => console.log(e))
       })
   };
 

@@ -32,24 +32,23 @@ function ERC20Balances() {
   }, [tokenPriceMap, filteredAssets]);
 
   let {blocks} = useDateToBlock()
-  console.log(Object.entries(blocks).find(block => block[0] == '0x1'))
+  const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
 
-  // const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
-  // const assetsHistoricPrice = useMemo(() => {
-  //   return filteredAssets.map(asset => {
-  //     return {
-  //       ...asset,
-  //       historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
-  //     }
-  //   })
-  // }, [tokenHistoricPriceMap, filteredAssets]);
+  const assetsHistoricPrice = useMemo(() => {
+    return filteredAssets.map(asset => {
+      return {
+        ...asset,
+        historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
+      }
+    })
+  }, [tokenHistoricPriceMap, filteredAssets]);
 
   return (
     <div style={{width: "100vw", padding: "15px"}}>
       <Skeleton loading={!assets}>
         {
           Object.values(filters).every(i => i)
-            ? <NetworkValueChart />
+            ? <NetworkValueChart assets={assetsHistoricPrice}/>
             : <TokenValueChart assets={filteredAssetsWithPrice}/>
         }
         <Filters filters={filters} toggleFilter={toggleFilter} assets={filteredAssetsWithPrice}/>
