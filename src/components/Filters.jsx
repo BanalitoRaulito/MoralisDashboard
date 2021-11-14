@@ -10,17 +10,19 @@ const styles = {
 };
 
 const icons = {
-  1: <ETHLogo />,
-  56: <BSCLogo />,
-  137: <PolygonLogo />,
-  43114: <AvaxLogo />,
+  1: <ETHLogo/>,
+  56: <BSCLogo/>,
+  137: <PolygonLogo/>,
+  43114: <AvaxLogo/>,
 }
 
-const Filters = ({filters, toggleFilter}) =>
-  Object
+const Filters = ({filters, toggleFilter, assets}) => {
+  return Object
     .values(networkConfigs)
-    .map(({chainId, currencySymbol}) =>
-      <Button
+    .map(({chainId, currencySymbol}) => {
+      let assetCount = assets.filter(asset => asset.chainId == chainId).length
+
+      return <Button
         style={styles.button}
         key={chainId}
         onClick={() => {
@@ -30,8 +32,9 @@ const Filters = ({filters, toggleFilter}) =>
         type="primary"
         icon={icons[chainId]}
       >
-        {currencySymbol}
+        {currencySymbol + ' ' + assetCount}
       </Button>
-    )
+    })
+}
 
 export default Filters;
