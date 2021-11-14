@@ -1,6 +1,6 @@
 import {useMoralis, useMoralisWeb3Api} from "react-moralis";
 import {useMoralisDapp} from "../providers/MoralisDappProvider/MoralisDappProvider";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {networkConfigs} from "../helpers/networks";
 
 export const useDateToBlock = () => {
@@ -8,7 +8,8 @@ export const useDateToBlock = () => {
   const {isInitialized} = useMoralis();
   const {walletAddress, chainId} = useMoralisDapp();
 
-  const [blocks, setBlocks] = useState([]);
+  const [blocks, setBlocks] = useState({});
+  const fetchedBlocks = useRef({}).current;
 
   useEffect(() => {
     if (isInitialized) {
@@ -22,12 +23,21 @@ export const useDateToBlock = () => {
     let networks = Object.keys(networkConfigs);
     networks
       .forEach(chainId => {
+        if (fetchedBlocks[chainId]) { return; }
+        fetchedBlocks[chainId] = true;
+
         if (!chainId) {return;}
         native
           .getDateToBlock({date: Date.now().toString(), chain: chainId})
-          .then(block => {
+          .then(({block}) => {
+            console.log(block)
             setBlocks(prevBlocks => {
-              prevBlocks[chainId] = block
+              const newMap = {...prevBlocks};
+              if (!newMap[chainId]) {
+                newMap[chainId] = {};
+              }
+              newMap[chainId] = block;
+              return newMap;
             });
           })
       })

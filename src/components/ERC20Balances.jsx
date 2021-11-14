@@ -34,15 +34,15 @@ function ERC20Balances() {
   let blocks = useDateToBlock()
   console.log(blocks)
 
-  const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
-  const assetsHistoricPrice = useMemo(() => {
-    return filteredAssets.map(asset => {
-      return {
-        ...asset,
-        historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
-      }
-    })
-  }, [tokenHistoricPriceMap, filteredAssets]);
+  // const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
+  // const assetsHistoricPrice = useMemo(() => {
+  //   return filteredAssets.map(asset => {
+  //     return {
+  //       ...asset,
+  //       historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
+  //     }
+  //   })
+  // }, [tokenHistoricPriceMap, filteredAssets]);
 
   return (
     <div style={{width: "100vw", padding: "15px"}}>
