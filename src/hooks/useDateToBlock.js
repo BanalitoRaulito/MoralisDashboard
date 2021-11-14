@@ -30,7 +30,6 @@ export const useDateToBlock = () => {
         native
           .getDateToBlock({date: Date.now().toString(), chain: chainId})
           .then(({block}) => {
-            console.log(block)
             setBlocks(prevBlocks => {
               const newMap = {...prevBlocks};
               if (!newMap[chainId]) {

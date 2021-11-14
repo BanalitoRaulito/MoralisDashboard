@@ -31,8 +31,8 @@ function ERC20Balances() {
     }).sort((a, b) => b.usdValue - a.usdValue)
   }, [tokenPriceMap, filteredAssets]);
 
-  let blocks = useDateToBlock()
-  console.log(blocks)
+  let {blocks} = useDateToBlock()
+  console.log(Object.entries(blocks).find(block => block[0] == '0x1'))
 
   // const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
   // const assetsHistoricPrice = useMemo(() => {
