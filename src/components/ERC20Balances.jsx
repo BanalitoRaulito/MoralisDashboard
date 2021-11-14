@@ -8,6 +8,8 @@ import {useTokenPriceMap} from "hooks/useTokenPriceMap";
 import Moralis from "moralis";
 import TokenValueChart from "./Chart/TokenValueChart";
 import NetworkValueChart from "./Chart/NetworkValueChart";
+import {useTokenHistoricPriceMap} from "../hooks/useTokenHistoricPriceMap";
+import {useDateToBlock} from "../hooks/useDateToBlock";
 
 function ERC20Balances() {
   const {filters, toggleFilter} = useFilters();
@@ -17,7 +19,7 @@ function ERC20Balances() {
     [assets, filters]
   );
 
-  const tokenPriceMap = useTokenPriceMap(assets);
+  const tokenPriceMap = useTokenPriceMap(filteredAssets);
   const filteredAssetsWithPrice = useMemo(() => {
     return filteredAssets.map(asset => {
       let usdPrice = tokenPriceMap.get(asset.chainId, asset.token_address)
@@ -29,15 +31,27 @@ function ERC20Balances() {
     }).sort((a, b) => b.usdValue - a.usdValue)
   }, [tokenPriceMap, filteredAssets]);
 
+  let blocks = useDateToBlock()
+  console.log(blocks)
+
+  const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
+  const assetsHistoricPrice = useMemo(() => {
+    return filteredAssets.map(asset => {
+      return {
+        ...asset,
+        historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
+      }
+    })
+  }, [tokenHistoricPriceMap, filteredAssets]);
+
   return (
     <div style={{width: "100vw", padding: "15px"}}>
-      {
-        Object.values(filters).every(i => i)
-        ? <NetworkValueChart />
-        : <TokenValueChart assets={filteredAssetsWithPrice}/>
-      }
-
       <Skeleton loading={!assets}>
+        {
+          Object.values(filters).every(i => i)
+            ? <NetworkValueChart />
+            : <TokenValueChart assets={filteredAssetsWithPrice}/>
+        }
         <Filters filters={filters} toggleFilter={toggleFilter} assets={filteredAssetsWithPrice}/>
         <BalanceTable assets={filteredAssetsWithPrice}/>
       </Skeleton>

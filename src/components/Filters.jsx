@@ -6,6 +6,12 @@ const styles = {
   button: {
     margin: "20px",
     marginLeft: "0px",
+    height: "60px",
+    fontSize: "35px",
+  },
+  text: {
+    marginLeft: "10px",
+    fontSize: "35px",
   }
 };
 
@@ -19,7 +25,7 @@ const icons = {
 const Filters = ({filters, toggleFilter, assets}) => {
   return Object
     .values(networkConfigs)
-    .map(({chainId, currencySymbol}) => {
+    .map(({chainId}) => {
       let assetCount = assets.filter(asset => asset.chainId == chainId).length
 
       return <Button
@@ -29,10 +35,9 @@ const Filters = ({filters, toggleFilter, assets}) => {
           toggleFilter(chainId);
         }}
         ghost={!filters[chainId]}
-        type="primary"
         icon={icons[chainId]}
       >
-        {currencySymbol + ' ' + assetCount}
+        <span style={styles.text}>{assetCount}</span>
       </Button>
     })
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Brush, Tooltip} from 'recharts';
 import { scaleOrdinal } from 'd3-scale';
@@ -39,6 +39,18 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+class CustomizedLabel extends PureComponent {
+  render() {
+    const { x, y, fill, value } = this.props;
+
+    return (
+      <text x={x} y={y} dy={-4} fill={fill} fontSize={10} textAnchor="middle">
+        {c2.format(value)}
+      </text>
+    );
+  }
+}
+
 function TokenValueChart({assets}) {
   return (
     <ResponsiveContainer width="100%" height="20%">
@@ -57,7 +69,7 @@ function TokenValueChart({assets}) {
         <XAxis dataKey="symbol" />
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="usdValue" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top' }}>
+        <Bar dataKey="usdValue" fill="#8884d8" shape={<TriangleBar />} label={<CustomizedLabel />}>
           {assets.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={colors[index % 10]} />
           ))}
