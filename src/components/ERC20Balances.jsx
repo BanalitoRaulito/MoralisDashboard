@@ -1,6 +1,6 @@
 import {useERC20Balances} from "../hooks/useERC20Balances";
 import {Skeleton} from "antd";
-import {useMemo} from "react";
+import React, {useMemo} from "react";
 import BalanceTable from "./BalanceTable";
 import {useTokenPriceMap} from "hooks/useTokenPriceMap";
 import Moralis from "moralis";
@@ -11,6 +11,13 @@ import HistoricTokenValueChart from "./Chart/HistoricTokenValueChart";
 import NetworkFilters from "./Filters/NetworkFilters";
 import {useNetworkFilters} from "../hooks/useNetworkFilters";
 import {useTokenFilters} from "../hooks/useTokenFilters";
+
+const styles = {
+  title: {
+    fontSize: "30px",
+    fontWeight: "700",
+  },
+};
 
 function ERC20Balances() {
   const {networkFilters, toggleNetworkFilter} = useNetworkFilters();
@@ -46,10 +53,17 @@ function ERC20Balances() {
     })
   }, [tokenHistoricPriceMap, filteredAssets]);
 
+  const isHistoricChart = Object.values(networkFilters).every(i => i);
+  document.title = isHistoricChart ? 'Historic token values' : 'Current token values'
+
   return (
-    <div style={{width: "100vw", padding: "15px"}}>
+    <div style={{width: "100vw", padding: "15px", top: "-60px"}}>
+      <h1 style={styles.title}>
+        💰 {document.title}
+      </h1>
+
       <Skeleton loading={!assets}>
-        {Object.values(networkFilters).every(i => i)
+        {isHistoricChart
             ? <HistoricTokenValueChart filters={tokenFilters} toggleFilter={toggleTokenFilter} assets={assetsHistoricPrice}/>
             : <TokenValueChart assets={filteredAssetsWithPrice}/>}
 

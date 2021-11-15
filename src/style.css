@@ -13,3 +13,11 @@
 .ant-menu-horizontal > .ant-menu-item a:hover {
   color: #21bf96 !important;
 }
+
+.custom-tooltip{
+  background: white;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 10px;
+  z-index: 2 !important;
+}
