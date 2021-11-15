@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+import { retryPromise } from "helpers/retryPromise";
 
 export const useERC20Balance = (params) => {
   const { account } = useMoralisWeb3Api();
@@ -19,10 +20,16 @@ export const useERC20Balance = (params) => {
   }, [isInitialized, chainId, walletAddress]);
 
   const fetchERC20Balance = async () => {
-    return await account
-      .getTokenBalances({ address: walletAddress, chain: params?.chain || chainId })
+    return (
+      retryPromise(
+        () => account.getTokenBalances({
+          address: walletAddress,
+          chain: params?.chain || chainId,
+        })
+      )
       .then((result) => result)
-      .catch((e) => alert(e.message));
+      .catch((e) => alert(e.message))
+    );
   };
 
   return { fetchERC20Balance, assets };

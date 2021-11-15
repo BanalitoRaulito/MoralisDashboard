@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useMoralis, useMoralisWeb3Api} from "react-moralis";
 import {useMoralisDapp} from "providers/MoralisDappProvider/MoralisDappProvider";
 import {networkConfigs} from "../helpers/networks";
+import { retryPromise } from "helpers/retryPromise";
 
 export const useERC20Balances = () => {
   const {account} = useMoralisWeb3Api();
@@ -23,16 +24,19 @@ export const useERC20Balances = () => {
 
     networks
       .forEach(chainId => {
-        account
-          .getTokenBalances({address: walletAddress, chain: chainId})
-          .then(tokenBalances => tokenBalances.map(tokenBalance => ({
-            ...tokenBalance,
-            chainId,
-          })))
-          .then(tokenBalances => {
-            console.log(tokenBalances)
-            setAssets(prevAssets => [...prevAssets, ...tokenBalances]);
+        retryPromise(
+          () => account.getTokenBalances({
+            address: walletAddress,
+            chain: chainId,
           })
+        )
+        .then(tokenBalances => tokenBalances.map(tokenBalance => ({
+          ...tokenBalance,
+          chainId,
+        })))
+        .then(tokenBalances => {
+          setAssets(prevAssets => [...prevAssets, ...tokenBalances]);
+        })
       })
   };
 
