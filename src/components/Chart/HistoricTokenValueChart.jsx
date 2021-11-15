@@ -2,13 +2,21 @@ import React from 'react';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush} from 'recharts';
 import Moralis from "moralis";
 import {c2} from "../../helpers/formatters";
+import {scaleOrdinal} from "d3-scale";
+import {schemeCategory10} from "d3-scale-chromatic";
 
-const CustomTooltip = ({active, payload, label}) => {
+const colors = scaleOrdinal(schemeCategory10).range();
+
+const CustomTooltip = (pla) => {
+  let {active, payload, label} = pla
+  console.log(pla)
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{label}</p>
-        {payload && payload.map(p => <p className="desc">{p.name} {c2.format(p.value)}</p>)}
+        <p className="custom-tooltip-label">{label}</p>
+        {payload && payload.map(p => {
+          return <p className="desc" style={{color: p.stroke}}>{p.name} {c2.format(p.value)}</p>
+        })}
       </div>
     );
   }
@@ -66,8 +74,9 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
         <YAxis/>
         <Tooltip content={<CustomTooltip/>}/>
         <Legend onClick={(value) => toggleFilter({symbol: value.value})}/>
-        {(newAssets.length && Object.keys(newAssets[0]).map((key) => {
-          return key !== 'name' ? <Line type="monotone" dataKey={key} stroke="#8884d8" activeDot={{r: 8}}/> : null;
+        {(newAssets.length && Object.keys(newAssets[0]).map((key, index) => {
+          return key !== 'name' ?
+            <Line type="monotone" dataKey={key} stroke={colors[index % 10]} activeDot={{r: 8}}/> : null;
         }))}
         <Brush/>
       </LineChart>

@@ -1,8 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Brush, Tooltip} from 'recharts';
-import { scaleOrdinal } from 'd3-scale';
-import { schemeCategory10 } from 'd3-scale-chromatic';
+import {scaleOrdinal} from 'd3-scale';
+import {schemeCategory10} from 'd3-scale-chromatic';
 import {c2} from "../../helpers/formatters";
 
 const colors = scaleOrdinal(schemeCategory10).range();
@@ -13,9 +13,9 @@ const getPath = (x, y, width, height) => `M${x},${y + height}
           Z`;
 
 const TriangleBar = (props) => {
-  const { fill, x, y, width, height } = props;
+  const {fill, x, y, width, height} = props;
 
-  return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+  return <path d={getPath(x, y, width, height)} stroke="none" fill={fill}/>;
 };
 
 TriangleBar.propTypes = {
@@ -26,12 +26,13 @@ TriangleBar.propTypes = {
   height: PropTypes.number,
 };
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({active, payload, label}) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">
-        <p className="label">{label}</p>
-        <p className="desc">{c2.format(payload[0].value)}</p>
+        <p className="custom-tooltip-label" style={{color: payload[0].fill}}>
+          {label} {c2.format(payload[0].value)}
+        </p>
       </div>
     );
   }
@@ -41,7 +42,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 class CustomizedLabel extends PureComponent {
   render() {
-    const { x, y, fill, value } = this.props;
+    const {x, y, fill, value} = this.props;
 
     return (
       <text x={x} y={y} dy={-4} fill={fill} fontSize={10} textAnchor="middle">
@@ -65,16 +66,16 @@ function TokenValueChart({assets}) {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="symbol" />
-        <YAxis />
-        <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="usdValue" fill="#8884d8" shape={<TriangleBar />} label={<CustomizedLabel />}>
+        <CartesianGrid strokeDasharray="3 3"/>
+        <XAxis dataKey="symbol"/>
+        <YAxis/>
+        <Tooltip content={<CustomTooltip/>}/>
+        <Bar dataKey="usdValue" fill="#8884d8" shape={<TriangleBar/>} label={<CustomizedLabel/>}>
           {assets.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={colors[index % 10]} />
+            <Cell key={`cell-${index}`} fill={colors[index % 10]}/>
           ))}
         </Bar>
-        <Brush />
+        <Brush/>
       </BarChart>
     </ResponsiveContainer>
   );
