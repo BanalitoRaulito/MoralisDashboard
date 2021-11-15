@@ -1,6 +1,6 @@
 import {Button} from "antd";
-import {networkConfigs} from "../helpers/networks";
-import {AvaxLogo, BSCLogo, ETHLogo, PolygonLogo} from "./Chains/Logos";
+import {networkConfigs} from "../../helpers/networks";
+import {AvaxLogo, BSCLogo, ETHLogo, PolygonLogo} from "../Chains/Logos";
 
 const styles = {
   button: {
@@ -22,7 +22,7 @@ const icons = {
   43114: <AvaxLogo/>,
 }
 
-const Filters = ({filters, toggleFilter, assets}) => {
+const NetworkFilters = ({filters, toggleFilter, assets}) => {
   return Object
     .values(networkConfigs)
     .map(({chainId}) => {
@@ -42,4 +42,4 @@ const Filters = ({filters, toggleFilter, assets}) => {
     })
 }
 
-export default Filters;
+export default NetworkFilters;

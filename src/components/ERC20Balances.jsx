@@ -1,22 +1,25 @@
 import {useERC20Balances} from "../hooks/useERC20Balances";
 import {Skeleton} from "antd";
 import {useMemo} from "react";
-import {useFilters} from "hooks/useFilters";
 import BalanceTable from "./BalanceTable";
-import Filters from "./Filters";
 import {useTokenPriceMap} from "hooks/useTokenPriceMap";
 import Moralis from "moralis";
 import TokenValueChart from "./Chart/TokenValueChart";
 import {useTokenHistoricPriceMap} from "../hooks/useTokenHistoricPriceMap";
 import {useDateToBlock} from "../hooks/useDateToBlock";
 import HistoricTokenValueChart from "./Chart/HistoricTokenValueChart";
+import NetworkFilters from "./Filters/NetworkFilters";
+import {useNetworkFilters} from "../hooks/useNetworkFilters";
+import {useTokenFilters} from "../hooks/useTokenFilters";
 
 function ERC20Balances() {
-  const {filters, toggleFilter} = useFilters();
+  const {networkFilters, toggleNetworkFilter} = useNetworkFilters();
+  const {tokenFilters, toggleTokenFilter} = useTokenFilters();
+
   const {assets} = useERC20Balances();
   const filteredAssets = useMemo(
-    () => assets.filter(asset => filters[Number(asset.chainId)]),
-    [assets, filters]
+    () => assets.filter(asset => networkFilters[Number(asset.chainId)]),
+    [assets, networkFilters]
   );
 
   const tokenPriceMap = useTokenPriceMap(filteredAssets);
@@ -46,13 +49,12 @@ function ERC20Balances() {
   return (
     <div style={{width: "100vw", padding: "15px"}}>
       <Skeleton loading={!assets}>
-        {
-          Object.values(filters).every(i => i)
-            ? <HistoricTokenValueChart assets={assetsHistoricPrice}/>
-            : <TokenValueChart assets={filteredAssetsWithPrice}/>
-        }
-        <Filters filters={filters} toggleFilter={toggleFilter} assets={filteredAssetsWithPrice}/>
-        <BalanceTable assets={filteredAssetsWithPrice}/>
+        {Object.values(networkFilters).every(i => i)
+            ? <HistoricTokenValueChart filters={tokenFilters} toggleFilter={toggleTokenFilter} assets={assetsHistoricPrice}/>
+            : <TokenValueChart assets={filteredAssetsWithPrice}/>}
+
+        <NetworkFilters filters={networkFilters} toggleFilter={toggleNetworkFilter} assets={filteredAssetsWithPrice}/>
+        <BalanceTable toggleFilter={toggleTokenFilter} assets={filteredAssetsWithPrice}/>
       </Skeleton>
     </div>
   );

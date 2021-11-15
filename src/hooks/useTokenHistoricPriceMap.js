@@ -19,7 +19,6 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
       fetchedChainTokenPairs[chainId][token_address] = true;
 
       const currentBlock = Object.entries(blocks).find(block => {
-        console.log(block[0], chainId)
         return block[0] == chainId
       })
       if (!currentBlock) {return;}

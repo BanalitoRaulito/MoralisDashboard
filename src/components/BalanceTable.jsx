@@ -2,7 +2,7 @@ import {useMoralis} from "react-moralis";
 import {Table} from "antd";
 import {c2, getEllipsisTxt} from "../helpers/formatters";
 
-const BalanceTable = ({assets}) => {
+const BalanceTable = ({toggleFilter, assets}) => {
   const {Moralis} = useMoralis();
 
   const columns = [
@@ -60,6 +60,12 @@ const BalanceTable = ({assets}) => {
       columns={columns}
       rowKey={(record) => {
         return record.token_address;
+      }}
+      onRow={token => ({onClick: () => {toggleFilter(token)}})}
+      onHeaderRow={(columns, index) => {
+        return {
+          onClick: () => {alert('sort ' + columns  + ' ' + index)}, // click header row
+        };
       }}
     />
   );
