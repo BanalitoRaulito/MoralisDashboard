@@ -7,9 +7,9 @@ import Filters from "./Filters";
 import {useTokenPriceMap} from "hooks/useTokenPriceMap";
 import Moralis from "moralis";
 import TokenValueChart from "./Chart/TokenValueChart";
-import NetworkValueChart from "./Chart/NetworkValueChart";
 import {useTokenHistoricPriceMap} from "../hooks/useTokenHistoricPriceMap";
 import {useDateToBlock} from "../hooks/useDateToBlock";
+import HistoricTokenValueChart from "./Chart/HistoricTokenValueChart";
 
 function ERC20Balances() {
   const {filters, toggleFilter} = useFilters();
@@ -48,7 +48,7 @@ function ERC20Balances() {
       <Skeleton loading={!assets}>
         {
           Object.values(filters).every(i => i)
-            ? <NetworkValueChart assets={assetsHistoricPrice}/>
+            ? <HistoricTokenValueChart assets={assetsHistoricPrice}/>
             : <TokenValueChart assets={filteredAssetsWithPrice}/>
         }
         <Filters filters={filters} toggleFilter={toggleFilter} assets={filteredAssetsWithPrice}/>

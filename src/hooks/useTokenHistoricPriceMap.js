@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useState } from "react"
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
-import Moralis from "moralis";
 
 export const useTokenHistoricPriceMap = (assets, blocks) => {
   const { token } = useMoralisWeb3Api();

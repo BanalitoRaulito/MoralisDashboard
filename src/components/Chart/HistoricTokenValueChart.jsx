@@ -1,58 +1,31 @@
 import React from 'react';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush} from 'recharts';
 import Moralis from "moralis";
+import {c2} from "../../helpers/formatters";
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+const CustomTooltip = ({active, payload, label}) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{label}</p>
+        {payload && payload.map(p => <p className="desc">{p.name} {c2.format(p.value)}</p>)}
+      </div>
+    );
+  }
 
-function NetworkValueChart({assets}) {
+  return null;
+};
+
+function HistoricTokenValueChart({assets}) {
   let newAssets = []
   assets.forEach(asset => {
-    if (!asset.historicPrices || asset.historicPrices.length !== 9) {return;}
+    if (!asset.historicPrices || asset.historicPrices.length !== 9) {
+      return;
+    }
     for (let i = 0; i < 9; i++) {
-      if (!asset.historicPrices[i]) {return;}
+      if (!asset.historicPrices[i]) {
+        return;
+      }
       let price = !asset.historicPrices[i]
         ? 0
         : Moralis.Units.FromWei(asset.balance, asset.decimals) * asset.historicPrices[i]
@@ -81,14 +54,16 @@ function NetworkValueChart({assets}) {
         <CartesianGrid strokeDasharray="3 3"/>
         <XAxis dataKey="name"/>
         <YAxis/>
-        <Tooltip/>
+        <Tooltip content={<CustomTooltip/>}/>
         <Legend/>
-        {newAssets.length && Object.keys(newAssets[0]).map((key) => <Line type="monotone" dataKey={key} stroke="#8884d8" activeDot={{r: 8}}/>)}
+        {(newAssets.length && Object.keys(newAssets[0]).map((key) => {
+          return key !== 'name' ? <Line type="monotone" dataKey={key} stroke="#8884d8" activeDot={{r: 8}}/> : null;
+        }))}
         <Brush/>
       </LineChart>
     </ResponsiveContainer>
   );
 }
 
-export default NetworkValueChart;
+export default HistoricTokenValueChart;
 
