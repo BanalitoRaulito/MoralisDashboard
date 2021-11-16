@@ -43,7 +43,6 @@ function ERC20Balances() {
 
   let {blocks} = useDateToBlock()
   const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
-
   const assetsHistoricPrice = useMemo(() => {
     return filteredAssets.map(asset => {
       return {
@@ -51,7 +50,7 @@ function ERC20Balances() {
         historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
       }
     })
-  }, [tokenHistoricPriceMap, filteredAssets]);
+  }, [tokenHistoricPriceMap, filteredAssets, blocks]);
 
   const isHistoricChart = Object.values(networkFilters).every(i => i);
   document.title = isHistoricChart ? 'Historic token values' : 'Current token values'

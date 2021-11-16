@@ -4,20 +4,19 @@ import Moralis from "moralis";
 import {c2} from "../../helpers/formatters";
 import {scaleOrdinal} from "d3-scale";
 import {schemeCategory10} from "d3-scale-chromatic";
+import {Card} from "antd";
 
 const colors = scaleOrdinal(schemeCategory10).range();
 
-const CustomTooltip = (pla) => {
-  let {active, payload, label} = pla
-  console.log(pla)
+const CustomTooltip = ({active, payload, label}) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip">
-        <p className="custom-tooltip-label">{label}</p>
+      <Card>
+        <p>{label}</p>
         {payload && payload.map(p => {
           return <p className="desc" style={{color: p.stroke}}>{p.name} {c2.format(p.value)}</p>
         })}
-      </div>
+      </Card>
     );
   }
 
@@ -28,7 +27,6 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
   let newAssets = []
   let filter = Object.entries(filters)
     .map(token => {
-      console.log(token)
       if (token[1] !== true) {
         return null;
       }
@@ -38,7 +36,7 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
   assets
     .filter(({symbol}) => !filter.find(f => f === symbol))
     .forEach(asset => {
-      if (!asset.historicPrices || asset.historicPrices.length !== 9) {
+      if (!asset.historicPrices || asset.historicPrices.length < 1) {
         return;
       }
       for (let i = 0; i < 9; i++) {
@@ -78,7 +76,6 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
           return key !== 'name' ?
             <Line type="monotone" dataKey={key} stroke={colors[index % 10]} activeDot={{r: 8}}/> : null;
         }))}
-        <Brush/>
       </LineChart>
     </ResponsiveContainer>
   );

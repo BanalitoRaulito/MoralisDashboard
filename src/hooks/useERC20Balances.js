@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useMoralis, useMoralisWeb3Api} from "react-moralis";
 import {useMoralisDapp} from "providers/MoralisDappProvider/MoralisDappProvider";
 import {networkConfigs} from "../helpers/networks";
+import {retryPromise} from "../helpers/retryPromise";
 
 export const useERC20Balances = () => {
   const {account} = useMoralisWeb3Api();

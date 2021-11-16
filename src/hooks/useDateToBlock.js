@@ -2,6 +2,7 @@ import {useMoralis, useMoralisWeb3Api} from "react-moralis";
 import {useMoralisDapp} from "../providers/MoralisDappProvider/MoralisDappProvider";
 import {useEffect, useRef, useState} from "react";
 import {networkConfigs} from "../helpers/networks";
+import {retryPromise} from "../helpers/retryPromise";
 
 export const useDateToBlock = () => {
   const {native} = useMoralisWeb3Api();
@@ -27,8 +28,7 @@ export const useDateToBlock = () => {
         fetchedBlocks[chainId] = true;
 
         if (!chainId) {return;}
-        native
-          .getDateToBlock({date: Date.now().toString(), chain: chainId})
+        retryPromise(() => native.getDateToBlock({date: Date.now().toString(), chain: chainId}))
           .then(({block}) => {
             setBlocks(prevBlocks => {
               const newMap = {...prevBlocks};
