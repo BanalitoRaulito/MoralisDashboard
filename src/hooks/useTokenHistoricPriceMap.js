@@ -15,16 +15,14 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
     if (!isInitialized) { return; }
 
     assets.forEach(({ chainId, token_address }) => {
+      const blocks = networkBlocks.find(block => block[0] == chainId)
+      if (!blocks) {return;}
+
       if (!fetchedChainTokenPairs[chainId]) { fetchedChainTokenPairs[chainId] = {}; }
       if (fetchedChainTokenPairs[chainId][token_address]) { return; }
       fetchedChainTokenPairs[chainId][token_address] = true;
 
-      const blocks = networkBlocks.find(block => block[0] == chainId)
-      console.log('bu', blocks)
-      if (!blocks) {return;}
-      console.log('ye', blocks)
       blocks[1].forEach(block => {
-        console.log(token_address, block)
         retryPromise(() => token.getTokenPrice({chain: chainId, address: token_address, to_block: block}))
           .then((token) => {
             if (!token) {return}

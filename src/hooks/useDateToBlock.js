@@ -32,7 +32,7 @@ export const useDateToBlock = () => {
         if (!chainId) {
           return;
         }
-        const interval = 1000 * 60 * 60 * 24
+        const interval = 1000 * 60 * 60 * 24 * 30 * 2
         const currentDate = Date.now()
         const amount = 10
         retryPromise(() => native.getDateToBlock({date: currentDate.toString(), chain: chainId}))
@@ -48,7 +48,8 @@ export const useDateToBlock = () => {
                     newBlockMap[chainId] = [];
                   }
 
-                  const blockInterval = (secondBlock.block - firstBlock.block) || 1;
+                  const blockInterval = 100000;
+                  console.log(blockInterval, secondBlock.block, firstBlock.block)
                   for (let i = firstBlock.block; i > firstBlock.block - blockInterval * amount; i -= blockInterval) {
                     newBlockMap[chainId].unshift(i);
                   }

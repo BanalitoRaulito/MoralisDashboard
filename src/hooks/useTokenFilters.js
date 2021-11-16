@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const useTokenFilters = () => {
-  const [tokenFilters, setTokenFilters] = useState([]);
+  const [tokenFilters, setTokenFilters] = useState({});
 
   const toggleTokenFilter = ({symbol}) => {
     setTokenFilters({

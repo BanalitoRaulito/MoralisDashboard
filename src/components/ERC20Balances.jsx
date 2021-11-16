@@ -23,7 +23,6 @@ function ERC20Balances() {
   const {networkFilters, toggleNetworkFilter} = useNetworkFilters();
   const {tokenFilters, toggleTokenFilter} = useTokenFilters();
   let blocks = useDateToBlock()
-  console.log(blocks)
 
   const {assets} = useERC20Balances();
   const filteredAssets = useMemo(
@@ -51,7 +50,7 @@ function ERC20Balances() {
         historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
       }
     })
-  }, [tokenHistoricPriceMap, filteredAssets]);
+  }, [tokenHistoricPriceMap, filteredAssets, blocks]);
 
   const isHistoricChart = Object.values(networkFilters).every(i => i);
   document.title = isHistoricChart ? 'Historic token values' : 'Current token values'
