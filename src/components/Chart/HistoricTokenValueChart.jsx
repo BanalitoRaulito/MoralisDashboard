@@ -33,7 +33,7 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
       return token[0];
     })
 
-  const interval = 1000*60*60*24;
+  const interval = 1000 * 60 * 60 * 24 * 30;
   assets
     .filter(({symbol}) => !filter.find(f => f === symbol))
     .forEach(asset => {

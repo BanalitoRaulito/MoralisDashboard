@@ -40,7 +40,7 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
       })
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isInitialized, assets]);
+  }, [isInitialized, assets, blocks]);
 
   return {
     get: (chainId, token_address) => map[chainId] && map[chainId][token_address]

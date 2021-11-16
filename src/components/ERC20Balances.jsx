@@ -50,7 +50,7 @@ function ERC20Balances() {
         historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
       }
     })
-  }, [tokenHistoricPriceMap, filteredAssets, blocks]);
+  }, [tokenHistoricPriceMap, filteredAssets]);
 
   const isHistoricChart = Object.values(networkFilters).every(i => i);
   document.title = isHistoricChart ? 'Historic token values' : 'Current token values'
