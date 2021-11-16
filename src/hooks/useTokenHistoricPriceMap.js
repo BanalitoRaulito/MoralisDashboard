@@ -9,7 +9,7 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
 
   const [map, setMap] = useState({});
   const fetchedChainTokenPairs = useRef({}).current;
-
+  const networkBlocks = Object.entries(blocks)
 
   useEffect(() => {
     if (!isInitialized) { return; }
@@ -19,13 +19,16 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
       if (fetchedChainTokenPairs[chainId][token_address]) { return; }
       fetchedChainTokenPairs[chainId][token_address] = true;
 
-      const currentBlock = Object.entries(blocks).find(block => {
-        return block[0] == chainId
-      })
-      if (!currentBlock) {return;}
-      for (let block = currentBlock[1]; block > currentBlock[1] - 1000000; block-=100000) {
-        retryPromise(()=>token.getTokenPrice({chain: chainId, address: token_address, to_block: block}))
-          .then(({usdPrice}) => {
+      const blocks = networkBlocks.find(block => block[0] == chainId)
+      console.log('bu', blocks)
+      if (!blocks) {return;}
+      console.log('ye', blocks)
+      blocks[1].forEach(block => {
+        console.log(token_address, block)
+        retryPromise(() => token.getTokenPrice({chain: chainId, address: token_address, to_block: block}))
+          .then((token) => {
+            if (!token) {return}
+            const {usdPrice} = token
             setMap(prevMap => {
               const newMap = {...prevMap};
               if (!newMap[chainId]) {
@@ -36,7 +39,7 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
             });
           })
           .catch(e => console.warn(e));
-      }
+      })
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, assets]);

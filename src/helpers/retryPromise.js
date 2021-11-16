@@ -14,12 +14,12 @@ export const retryPromise = cp => {
       })
         .catch(e => {
           if (retries <= RETRY_COUNT) {
-            console.info(
-              `Retry number ${retries}` +
-              (e?.message === "timeout"
-                ? "...and it was a timeout"
-                : "")
-            )
+            // console.warn(
+            //   `Retry number ${retries}` +
+            //   (e?.message === "timeout"
+            //     ? "...and it was a timeout"
+            //     : "")
+            // )
             return f();
           } else {
             console.warn(`Failed promise after ${RETRY_COUNT} retries`)
