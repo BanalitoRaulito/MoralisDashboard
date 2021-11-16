@@ -32,13 +32,19 @@ export const useDateToBlock = () => {
         if (!chainId) {
           return;
         }
-        const interval = 1000 * 60 * 60 * 24 * 30 * 2
+        const interval = 1000 * 60 * 60 * 24
         const currentDate = Date.now()
         const amount = 10
-        retryPromise(() => native.getDateToBlock({date: currentDate.toString(), chain: chainId}))
+        retryPromise(() => native.getDateToBlock({
+          date: new Date(currentDate),
+          chain: chainId
+        }))
           .then(firstBlock => {
             if (!firstBlock) {return;}
-            retryPromise(() => native.getDateToBlock({date: (currentDate - interval).toString(), chain: chainId}))
+            retryPromise(() => native.getDateToBlock({
+              date: new Date(currentDate - interval),
+              chain: chainId
+            }))
               .then(secondBlock => {
                 if (!secondBlock) {return;}
 
@@ -48,7 +54,7 @@ export const useDateToBlock = () => {
                     newBlockMap[chainId] = [];
                   }
 
-                  const blockInterval = 100000;
+                  const blockInterval = (firstBlock.block - secondBlock.block) || 1;
                   console.log(blockInterval, secondBlock.block, firstBlock.block)
                   for (let i = firstBlock.block; i > firstBlock.block - blockInterval * amount; i -= blockInterval) {
                     newBlockMap[chainId].unshift(i);

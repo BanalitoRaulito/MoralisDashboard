@@ -33,13 +33,14 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
       return token[0];
     })
 
+  const interval = 1000*60*60*24;
   assets
     .filter(({symbol}) => !filter.find(f => f === symbol))
     .forEach(asset => {
       if (!asset.historicPrices || asset.historicPrices.length < 1) {
         return;
       }
-      for (let i = 0; i < 9; i++) {
+      for (let i = 0; i <= 11; i++) {
         if (!asset.historicPrices[i]) {
           return;
         }
@@ -49,7 +50,7 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
         newAssets[i] = {
           ...newAssets[i],
           [asset.symbol]: price,
-          name: i
+          name: new Date(Date.now() - (interval * (8-i))).toDateString()
         }
       }
     })
