@@ -25,7 +25,8 @@ export const useTokenPriceMap = assets => {
             newMap[chainId][token_address] = usdPrice;
             return newMap;
           });
-        });
+        })
+        .catch(e => console.warn(e));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, assets]);

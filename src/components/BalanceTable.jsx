@@ -1,8 +1,9 @@
 import {useMoralis} from "react-moralis";
 import {Table} from "antd";
-import {getEllipsisTxt} from "../helpers/formatters";
+import {c2, getEllipsisTxt} from "../helpers/formatters";
+import createColor from "create-color";
 
-const BalanceTable = ({assets}) => {
+const BalanceTable = ({toggleFilter, assets}) => {
   const {Moralis} = useMoralis();
 
   const columns = [
@@ -29,7 +30,7 @@ const BalanceTable = ({assets}) => {
       title: "Symbol",
       dataIndex: "symbol",
       key: "symbol",
-      render: (symbol) => symbol,
+      render: (symbol) => <span style={{color: createColor([symbol])}}>{symbol}</span>,
     },
     {
       title: "Balance",
@@ -39,12 +40,11 @@ const BalanceTable = ({assets}) => {
         parseFloat(Moralis.Units.FromWei(value, item.decimals).toFixed(6)),
     },
     {
-      title: "Balance USD",
+      title: "USD Value",
       dataIndex: "usdPrice",
       key: "usdPrice",
       render: (usdPrice, item) => {
-        console.log(usdPrice, item)
-        return Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice;
+        return usdPrice ? c2.format(Moralis.Units.FromWei(item.balance, item.decimals) * usdPrice) : 'Loading...';
       },
     },
     {
@@ -61,6 +61,12 @@ const BalanceTable = ({assets}) => {
       columns={columns}
       rowKey={(record) => {
         return record.token_address;
+      }}
+      onRow={token => ({onClick: () => {toggleFilter(token)}})}
+      onHeaderRow={(columns, index) => {
+        return {
+          onClick: () => {alert('sort ' + columns  + ' ' + index)}, // click header row
+        };
       }}
     />
   );
