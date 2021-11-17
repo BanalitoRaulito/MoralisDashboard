@@ -1,5 +1,5 @@
 import {useERC20Balances} from "../hooks/useERC20Balances";
-import {Skeleton} from "antd";
+import {Col, Input, Row, Skeleton} from "antd";
 import React, {useMemo} from "react";
 import BalanceTable from "./BalanceTable";
 import {useTokenPriceMap} from "hooks/useTokenPriceMap";
@@ -42,15 +42,15 @@ function ERC20Balances() {
     }).sort((a, b) => b.usdValue - a.usdValue)
   }, [tokenPriceMap, filteredAssets]);
 
-  const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssets, blocks);
+  const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssetsWithPrice, blocks);
   const assetsHistoricPrice = useMemo(() => {
-    return filteredAssets.map(asset => {
+    return filteredAssetsWithPrice.map(asset => {
       return {
         ...asset,
         historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
       }
-    })
-  }, [tokenHistoricPriceMap, filteredAssets]);
+    }).sort((a, b) => b.usdValue - a.usdValue)
+  }, [tokenHistoricPriceMap, filteredAssetsWithPrice, blocks]);
 
   const isHistoricChart = Object.values(networkFilters).every(i => i);
   document.title = isHistoricChart ? 'Historic token values' : 'Current token values'
@@ -66,7 +66,17 @@ function ERC20Balances() {
             ? <HistoricTokenValueChart filters={tokenFilters} toggleFilter={toggleTokenFilter} assets={assetsHistoricPrice}/>
             : <TokenValueChart assets={filteredAssetsWithPrice}/>}
 
-        <NetworkFilters filters={networkFilters} toggleFilter={toggleNetworkFilter} assets={filteredAssetsWithPrice}/>
+        <Input.Group size="large">
+          <Row gutter={8}>
+            <Col span={20}>
+              <NetworkFilters filters={networkFilters} toggleFilter={toggleNetworkFilter} assets={filteredAssetsWithPrice}/>
+            </Col>
+            <Col span={4}>
+              <Input style={{height: "60px", marginTop: "20px"}} defaultValue="26888888" />
+            </Col>
+          </Row>
+        </Input.Group>
+
         <BalanceTable toggleFilter={toggleTokenFilter} assets={filteredAssetsWithPrice}/>
       </Skeleton>
     </div>

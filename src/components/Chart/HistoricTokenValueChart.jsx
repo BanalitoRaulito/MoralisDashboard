@@ -1,20 +1,18 @@
 import React from 'react';
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush} from 'recharts';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import Moralis from "moralis";
 import {c2} from "../../helpers/formatters";
-import {scaleOrdinal} from "d3-scale";
-import {schemeCategory10} from "d3-scale-chromatic";
+import createColor from "create-color";
 import {Card} from "antd";
-
-const colors = scaleOrdinal(schemeCategory10).range();
 
 const CustomTooltip = ({active, payload, label}) => {
   if (active && payload && payload.length) {
     return (
-      <Card>
-        <p>{label}</p>
+      <Card title={label}>
         {payload && payload.map(p => {
-          return <p className="desc" style={{color: p.stroke}}>{p.name} {c2.format(p.value)}</p>
+          return <p className="desc" style={{color: p.stroke}}>
+            {p.name} {c2.format(p.value)}
+          </p>
         })}
       </Card>
     );
@@ -47,10 +45,11 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
         let price = !asset.historicPrices[i]
           ? 0
           : Moralis.Units.FromWei(asset.balance, asset.decimals) * asset.historicPrices[i]
+
         newAssets[i] = {
           ...newAssets[i],
           [asset.symbol]: price,
-          name: new Date(Date.now() - (interval * (8-i))).toDateString()
+          name: new Date(Date.now() - (interval * (8 - i))).toDateString()
         }
       }
     })
@@ -73,9 +72,9 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
         <YAxis/>
         <Tooltip content={<CustomTooltip/>}/>
         <Legend onClick={(value) => toggleFilter({symbol: value.value})}/>
-        {(newAssets.length && Object.keys(newAssets[0]).map((key, index) => {
+        {(newAssets.length && Object.keys(newAssets[0]).map(key => {
           return key !== 'name' ?
-            <Line type="monotone" dataKey={key} stroke={colors[index % 10]} activeDot={{r: 8}}/> : null;
+            <Line type="monotone" dataKey={key} stroke={createColor([key])} activeDot={{r: 8}}/> : null;
         }))}
       </LineChart>
     </ResponsiveContainer>
