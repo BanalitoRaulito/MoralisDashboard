@@ -74,7 +74,7 @@ function HistoricTokenValueChart({filters, toggleFilter, assets}) {
         <Legend onClick={(value) => toggleFilter({symbol: value.value})}/>
         {(newAssets.length && Object.keys(newAssets[0]).map(key => {
           return key !== 'name' ?
-            <Line type="monotone" dataKey={key} stroke={createColor([key])} activeDot={{r: 8}}/> : null;
+            <Line key={key} type="monotone" dataKey={key} stroke={createColor([key])} activeDot={{r: 8}}/> : null;
         }))}
       </LineChart>
     </ResponsiveContainer>

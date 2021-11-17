@@ -15,7 +15,7 @@ export const useTokenHistoricPriceMap = (assets, blocks) => {
     if (!isInitialized) { return; }
 
     assets.forEach(({ chainId, token_address }) => {
-      const blocks = networkBlocks.find(block => block[0] == chainId)
+      const blocks = networkBlocks.find(block => block[0] === chainId)
       if (!blocks) {return;}
 
       if (!fetchedChainTokenPairs[chainId]) { fetchedChainTokenPairs[chainId] = {}; }
