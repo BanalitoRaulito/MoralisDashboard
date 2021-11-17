@@ -23,7 +23,8 @@
 - BalanceTable.jsx
 - ERC20Balances.jsx
 - NetworkFilters.jsx
-- HistoricValueChart.jsx
+- HistoricTokenValueChart.jsx
+- HistoricBlockchainValueChart.jsx
 - TokenValueChart.jsx
 
 ### `helpers:`
