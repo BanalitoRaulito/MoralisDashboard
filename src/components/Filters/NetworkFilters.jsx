@@ -26,7 +26,8 @@ const NetworkFilters = ({filters, toggleFilter, assets}) => {
   return Object
     .values(networkConfigs)
     .map(({chainId}) => {
-      let assetCount = assets.filter(asset => asset.chainId === chainId).length
+      let assetCount = assets.filter(asset => Number(asset.chainId) === chainId).length
+      console.log(assets, chainId, assets.filter(asset => asset.chainId === chainId).length)
 
       return <Button
         style={styles.button}
