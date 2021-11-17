@@ -1,28 +1,20 @@
-const RETRY_COUNT = 3
-const TIMEOUT = 15000
+const RETRY_COUNT = 4
+const TIMEOUT = 20000
 
 export const retryPromise = cp => {
-  let retries = 0
+  let retries = 1
   const f = () => {
     retries++;
     return (
       new Promise((resolve, reject) => {
         setTimeout(() => {
           reject(new Error("timeout"))
-        }, TIMEOUT)
+        }, TIMEOUT * retries)
         cp().then(resolve, reject)
       })
         .catch(e => {
           if (retries <= RETRY_COUNT) {
-            // console.warn(
-            //   `Retry number ${retries}` +
-            //   (e?.message === "timeout"
-            //     ? "...and it was a timeout"
-            //     : "")
-            // )
             return f();
-          } else {
-            console.warn(`Failed promise after ${RETRY_COUNT} retries`)
           }
         })
     );

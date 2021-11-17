@@ -22,9 +22,9 @@ const styles = {
     marginTop: "20px",
   },
   container: {
-    width: "100vw",
+    width: "65vw",
     padding: "15px",
-    top: "-60px",
+    position: "relative",
   },
 };
 
@@ -33,6 +33,7 @@ function ERC20Balances() {
 
   const {networkFilters, toggleNetworkFilter} = useNetworkFilters();
   const {tokenFilters, toggleTokenFilter} = useTokenFilters();
+
   let blocks = useDateToBlock()
 
   const {assets} = useERC20Balances({ address: search });
@@ -55,7 +56,7 @@ function ERC20Balances() {
   );
 
   const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssetsWithPrice, blocks);
-  const filteredAssetsWithHistoricPrices = useMemo(() => 
+  const filteredAssetsWithHistoricPrices = useMemo(() =>
     filteredAssetsWithPrice.map(asset => ({
       ...asset,
       historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
@@ -82,7 +83,6 @@ function ERC20Balances() {
                 assets={filteredAssetsWithHistoricPrices}
               />
             : <TokenValueChart assets={filteredAssetsWithPrice}/>}
-
         <Input.Group size="large">
           <Row gutter={8}>
             <Col span={20}>
@@ -94,6 +94,7 @@ function ERC20Balances() {
             </Col>
             <Col span={4}>
               <Input
+                placeholder="Account address"
                 style={styles.search}
                 onChange={event => setSearch(event.target.value)}
               />

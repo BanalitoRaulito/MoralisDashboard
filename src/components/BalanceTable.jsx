@@ -1,6 +1,7 @@
 import {useMoralis} from "react-moralis";
 import {Table} from "antd";
 import {c2, getEllipsisTxt} from "../helpers/formatters";
+import createColor from "create-color";
 
 const BalanceTable = ({toggleFilter, assets}) => {
   const {Moralis} = useMoralis();
@@ -29,7 +30,7 @@ const BalanceTable = ({toggleFilter, assets}) => {
       title: "Symbol",
       dataIndex: "symbol",
       key: "symbol",
-      render: (symbol) => symbol,
+      render: (symbol) => <span style={{color: createColor([symbol])}}>{symbol}</span>,
     },
     {
       title: "Balance",

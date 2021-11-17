@@ -12,7 +12,6 @@ const getPath = (x, y, width, height) => `M${x},${y + height}
 
 const TriangleBar = (props) => {
   const {fill, x, y, width, height} = props;
-
   return <path d={getPath(x, y, width, height)} stroke="none" fill={fill}/>;
 };
 
@@ -68,9 +67,10 @@ function TokenValueChart({assets}) {
         <YAxis/>
         <Tooltip content={<CustomTooltip/>}/>
         <Bar dataKey="usdValue" fill="#8884d8" shape={<TriangleBar/>} label={<CustomizedLabel/>}>
-          {assets.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={createColor([entry.symbol])}/>
-          ))}
+          {assets.map((entry, index) => {
+            console.log(entry)
+            return <Cell key={entry.symbol} fill={createColor([entry.symbol])}/>
+          })}
         </Bar>
         <Brush/>
       </BarChart>
