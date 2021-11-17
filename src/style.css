@@ -13,7 +13,10 @@
 .ant-menu-horizontal > .ant-menu-item a:hover {
   color: #21bf96 !important;
 }
-
+.ant-layout-header{
+  z-index: 3 !important;
+}
 .recharts-wrapper {
+  position: relative;
   z-index: 2;
 }

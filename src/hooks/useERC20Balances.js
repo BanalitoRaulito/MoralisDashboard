@@ -9,6 +9,7 @@ export const useERC20Balances = ({ address }) => {
   const { walletAddress } = useMoralisDapp();
   const [assets, setAssets] = useState([]);
 
+  address = address || walletAddress;
   useEffect(
     () => {
       if (!isInitialized) { return }
@@ -17,10 +18,7 @@ export const useERC20Balances = ({ address }) => {
       networks
         .forEach(chainId => {
           account
-            .getTokenBalances({
-              address: address || walletAddress,
-              chain: chainId
-            })
+            .getTokenBalances({address, chain: chainId})
             .then(tokenBalances => tokenBalances.map(tokenBalance => ({
               ...tokenBalance,
               chainId,
@@ -28,7 +26,6 @@ export const useERC20Balances = ({ address }) => {
             .then(tokenBalances => {
               setAssets(prevAssets => [...prevAssets, ...tokenBalances]);
             })
-            .catch((e) => alert(e.message));
         })
       return () => setAssets([])
     },

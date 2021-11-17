@@ -11,6 +11,7 @@ import HistoricTokenValueChart from "./Chart/HistoricTokenValueChart";
 import NetworkFilters from "./Filters/NetworkFilters";
 import {useNetworkFilters} from "../hooks/useNetworkFilters";
 import {useTokenFilters} from "../hooks/useTokenFilters";
+import HistoricBlockchainValueChart from "./Chart/HistoricBlockchainValueChart";
 
 const styles = {
   title: {
@@ -36,7 +37,7 @@ function ERC20Balances() {
 
   let blocks = useDateToBlock()
 
-  const {assets} = useERC20Balances({ address: search });
+  const {assets} = useERC20Balances({address: search});
   const filteredAssets = useMemo(
     () => assets.filter(asset => networkFilters[Number(asset.chainId)]),
     [assets, networkFilters]
@@ -44,23 +45,23 @@ function ERC20Balances() {
 
   const tokenPriceMap = useTokenPriceMap(filteredAssets);
   const filteredAssetsWithPrice = useMemo(() =>
-    filteredAssets.map(asset => {
-      let usdPrice = tokenPriceMap.get(asset.chainId, asset.token_address)
-      return {
-        ...asset,
-        usdPrice,
-        usdValue: Moralis.Units.FromWei(asset.balance, asset.decimals) * usdPrice
-      }
-    }).sort((a, b) => b.usdValue - a.usdValue),
+      filteredAssets.map(asset => {
+        let usdPrice = tokenPriceMap.get(asset.chainId, asset.token_address)
+        return {
+          ...asset,
+          usdPrice,
+          usdValue: Moralis.Units.FromWei(asset.balance, asset.decimals) * usdPrice
+        }
+      }).sort((a, b) => b.usdValue - a.usdValue),
     [tokenPriceMap, filteredAssets]
   );
 
   const tokenHistoricPriceMap = useTokenHistoricPriceMap(filteredAssetsWithPrice, blocks);
   const filteredAssetsWithHistoricPrices = useMemo(() =>
-    filteredAssetsWithPrice.map(asset => ({
-      ...asset,
-      historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
-    })).sort((a, b) => b.usdValue - a.usdValue),
+      filteredAssetsWithPrice.map(asset => ({
+        ...asset,
+        historicPrices: tokenHistoricPriceMap.get(asset.chainId, asset.token_address)
+      })).sort((a, b) => b.usdValue - a.usdValue),
     [tokenHistoricPriceMap, filteredAssetsWithPrice]
   );
 
@@ -77,12 +78,19 @@ function ERC20Balances() {
 
       <Skeleton loading={!assets}>
         {isHistoricChart
-            ? <HistoricTokenValueChart
-                filters={tokenFilters}
-                toggleFilter={toggleTokenFilter}
-                assets={filteredAssetsWithHistoricPrices}
-              />
-            : <TokenValueChart assets={filteredAssetsWithPrice}/>}
+          ? <>
+            <HistoricBlockchainValueChart
+              filters={tokenFilters}
+              toggleFilter={toggleTokenFilter}
+              assets={filteredAssetsWithHistoricPrices}
+            />
+            <HistoricTokenValueChart
+              filters={tokenFilters}
+              toggleFilter={toggleTokenFilter}
+              assets={filteredAssetsWithHistoricPrices}
+            />
+          </>
+          : <TokenValueChart assets={filteredAssetsWithPrice}/>}
         <Input.Group size="large">
           <Row gutter={8}>
             <Col span={20}>
